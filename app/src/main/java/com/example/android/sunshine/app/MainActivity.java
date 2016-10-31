@@ -1,8 +1,8 @@
 package com.example.android.sunshine.app;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +17,8 @@ import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    boolean colorSwap = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,11 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    public void colorChange(View view)
+    {
+        
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -46,6 +53,18 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_edit) {
+            if (colorSwap == false)
+            {
+                colorSwap = true;
+            }
+            else if (colorSwap == true)
+            {
+                colorSwap = false;
+            }
+            System.out.println(colorSwap);
+
         }
 
         return super.onOptionsItemSelected(item);
