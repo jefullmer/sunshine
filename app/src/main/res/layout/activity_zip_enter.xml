@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.android.sunshine.app.zipEnter">
+    tools:context="com.example.android.sunshine.app.zipEnter"
+    android:background="@drawable/gradient_background">
 
     <TextView
         android:text="Enter a 5 digit zip code"
@@ -36,9 +37,29 @@
         android:text="Next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/zipCode"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="98dp"
         android:id="@+id/submit"
-        android:onClick="submitZip" />
+        android:onClick="submitZip"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <ToggleButton
+        android:text="ToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/toggleButton"
+        android:layout_below="@+id/submit"
+        android:layout_alignLeft="@+id/message"
+        android:layout_alignStart="@+id/message"
+        android:layout_marginTop="14dp"
+        android:onClick="onToggleClicked"/>
+
+    <TextView
+        android:text="Fahrenheit format"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:textSize="24sp"
+        android:layout_alignBottom="@+id/toggleButton"
+        android:layout_alignLeft="@+id/submit"
+        android:layout_alignStart="@+id/submit" />
 </RelativeLayout>

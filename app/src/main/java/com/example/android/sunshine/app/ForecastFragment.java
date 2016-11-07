@@ -41,6 +41,7 @@ public class ForecastFragment extends Fragment {
 
     ArrayAdapter<String> mForecastAdapter;
     String zipText = "84102";
+    String fahOn = "false";
 
     public ForecastFragment() {
     }
@@ -74,6 +75,7 @@ public class ForecastFragment extends Fragment {
 
         //zipText = Intent.getStringExtra(zipEnter.EXTRA_MESSAGE);
         zipText = zipEnter.EXTRA_MESSAGE;
+        fahOn = zipEnter.fahOn;
 
         String[] data = {
                     "Mon 6/23 - Sunny - 31/17",
@@ -99,7 +101,7 @@ public class ForecastFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
 
-        weatherTask.execute(zipText, "true");
+        weatherTask.execute(zipText, fahOn);
 
         return rootView;
     }
