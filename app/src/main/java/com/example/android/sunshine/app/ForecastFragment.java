@@ -40,6 +40,7 @@ import java.util.List;
 public class ForecastFragment extends Fragment {
 
     ArrayAdapter<String> mForecastAdapter;
+    String zipText = "84102";
 
     public ForecastFragment() {
     }
@@ -60,7 +61,7 @@ public class ForecastFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             FetchWeatherTask weatherTask= new FetchWeatherTask();
-            weatherTask.execute("84102");
+            weatherTask.execute("84044", "false");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -69,15 +70,19 @@ public class ForecastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        FetchWeatherTask weatherTask= new FetchWeatherTask();
+
+        //zipText = Intent.getStringExtra(zipEnter.EXTRA_MESSAGE);
+        zipText = zipEnter.EXTRA_MESSAGE;
 
         String[] data = {
-                "Mon 6/23 - Sunny - 31/17",
-                "Tue 6/24 - Foggy - 21/8",
-                "Wed 6/25 - Cloudy - 22/17",
-                "Thurs 6/26 - Rainy - 18/11",
-                "Fri 6/27 - Foggy - 21/10",
-                "Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18",
-                "Sun 6/29 - Sunny - 20/7"
+                    "Mon 6/23 - Sunny - 31/17",
+                    "Tue 6/24 - Foggy - 21/8",
+                    "Wed 6/25 - Cloudy - 22/17",
+                    "Thurs 6/26 - Rainy - 18/11",
+                    "Fri 6/27 - Foggy - 21/10",
+                    "Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18",
+                    "Sun 6/29 - Sunny - 20/7"
         };
 
         List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
@@ -93,6 +98,8 @@ public class ForecastFragment extends Fragment {
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
+
+        weatherTask.execute(zipText, "true");
 
         return rootView;
     }
@@ -116,6 +123,10 @@ public class ForecastFragment extends Fragment {
             String format = "json";
             String units = "metric";
             int numDays = 7;
+            boolean fah = false;
+            if (params[1] != null){
+                fah = Boolean.valueOf(params[1]);
+            }
 
             try {
 
@@ -188,7 +199,7 @@ public class ForecastFragment extends Fragment {
             }
 
             try {
-                return getWeatherDataFromJson(forecastJsonStr, numDays);
+                return getWeatherDataFromJson(forecastJsonStr, numDays, fah);
             } catch (JSONException e){
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
@@ -198,7 +209,7 @@ public class ForecastFragment extends Fragment {
 
         }
 
-        private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)
+        public String[] getWeatherDataFromJson(String forecastJsonStr, int numDays, boolean fahT)
                 throws JSONException{
             final String OWM_LIST = "list";
             final String OWM_WEATHER = "weather";
@@ -217,6 +228,8 @@ public class ForecastFragment extends Fragment {
             int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
 
             dayTime = new Time();
+
+
 
             String[] resultStrs = new String[numDays];
             for (int i = 0; i < weatherArray.length(); i++)
@@ -239,6 +252,11 @@ public class ForecastFragment extends Fragment {
                 double high = temperatureObject.getDouble(OWM_MAX);
                 double low = temperatureObject.getDouble(OWM_MIN);
 
+                if (fahT == true) {
+                    high = convertToFah(high);
+                    low = convertToFah(low);
+                }
+
                 highAndLow = formatHighLows(high, low);
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
@@ -258,6 +276,14 @@ public class ForecastFragment extends Fragment {
             String highLowStr = roundedHigh + "/" + roundedLow;
             return highLowStr;
         }
+
+        private double convertToFah(double cTemp)
+        {
+            long roundedCTemp = Math.round(cTemp);
+            double fTemp = roundedCTemp * 9/5 + 32;
+            return fTemp;
+        }
+
         @Override
         protected void onPostExecute(String[] result)
         {

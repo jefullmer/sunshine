@@ -25,7 +25,7 @@ public class splashScreen extends ActionBarActivity {
     }
     public void nextActivity()
     {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, zipEnter.class);
         startActivity(intent);
     }
 
